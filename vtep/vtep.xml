@@ -46,10 +46,6 @@
         connection should be configured.  See the <ref table="Manager"/> table
         for more information.
       </column>
-
-      <column name="ssl">
-        SSL configuration used by the database server.
-      </column>
     </group>
   </table>
 
@@ -143,38 +139,6 @@
 
     <column name="vni">
       For <code>vxlan_over_ipv4</code> encapsulation, the VXLAN VNI.
-    </column>
-  </table>
-
-  <table name="SSL">
-    SSL configuration for the database server.
-
-    <column name="private_key">
-      Name of a PEM file containing the private key used as the switch's
-      identity for SSL connections to the controller.
-    </column>
-
-    <column name="certificate">
-      Name of a PEM file containing a certificate, signed by the
-      certificate authority (CA) used by the controller and manager,
-      that certifies the switch's private key, identifying a trustworthy
-      switch.
-    </column>
-
-    <column name="ca_cert">
-      Name of a PEM file containing the CA certificate used to verify
-      that the switch is connected to a trustworthy controller.
-    </column>
-
-    <column name="bootstrap_ca_cert">
-      If set to <code>true</code>, then the database server will attempt to
-      obtain the CA certificate on its first SSL connection and save it to the
-      named PEM file. If it is successful, it will immediately drop the
-      connection and reconnect, and from then on all SSL connections must be
-      authenticated by a certificate signed by the CA certificate thus
-      obtained.  <em>This option exposes the SSL connection to a
-      man-in-the-middle attack obtaining the initial CA certificate.</em> It
-      may still be useful for bootstrapping.
     </column>
   </table>
 
