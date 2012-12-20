@@ -117,19 +117,36 @@
     domain; an Ethernet broadcast domain.
 
     <column name="mac_locations">
-      Identifies the physical location at which given Ethernet unicast,
-      multicast, or broadcast addresses are known to reside, functioning in a
-      way analogous to a MAC learning table for a logical switch.
+      <p>
+        Identifies the physical location or locations at which given
+        Ethernet addresses are known to reside, functioning in a way
+        analogous to a MAC learning table for a logical switch.
+      </p>
+
+      <p>
+        Unicast Ethernet addresses should map to <ref
+        table="Physical_Locator_Set"/> records that point to exactly
+        one <ref table="Physical_Locator"/> record.  Multicast and
+        broadcast Ethernet addresses may map to <ref
+        table="Physical_Locator_Set"/> records that point more than
+        one <ref table="Physical_Locator"/> record.
+      </p>
+
+      <p>
+        The keyword <code>unknown-dst</code> is used as a special
+        ``Ethernet address'' that indicates the locations to which
+        packets in a logical switch whose destination addresses do not
+        otherwise appear in <ref column="mac_locations"/> should be
+        sent.
+      </p>
     </column>
 
-    <column name="ipv4_locations">
-      Identifies the physical location at which given IPv4 addresses are known
-      to reside, allowing for ARP suppression.
-    </column>
-
-    <column name="ipv6_locations">
-      Identifies the physical location at which given IPv6 addresses are known
-      to reside, allowing for IPv6 neighbor discovery suppression.
+    <column name="ip_to_mac">
+      Maps from an IPv4 or IPv6 address to the MAC address at which it
+      resides.  (Using the inverse map, from MAC address to IP
+      address, would make it impossible to associate both an IPv4 and
+      IPv6 address, or multiple IPv4 or IPv6 addresses, with a single
+      MAC.)
     </column>
 
     <group title="Per Logical-Switch Key">
@@ -199,6 +216,20 @@
 	login banner.
       </column>
     </group>
+  </table>
+
+  <table name="Physical_Locator_Set">
+    <p>
+      A set of one or more <ref table="Physical_Locator"/>s.
+    </p>
+
+    <p>
+      This table exists only because OVSDB does not have a way to
+      express the type ``map from string to one or more <ref
+      table="Physical_Locator"/> records.''
+    </p>
+
+    <column name="locators"/>    
   </table>
 
   <table name="Physical_Locator">
