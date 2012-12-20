@@ -1,6 +1,49 @@
 {
   "name": "hardware_vtep_schema",
   "tables": {
+    "Global": {
+      "columns": {
+        "managers": {
+          "type": {"key": {"type": "uuid",
+                           "refTable": "Manager"},
+                   "min": 0, "max": "unlimited"}},
+        "ssl": {
+          "type": {"key": {"type": "uuid",
+                           "refTable": "SSL"},
+                   "min": 0, "max": 1}}
+      },
+      "maxRows": 1,
+      "isRoot": true},
+    "Manager": {
+      "columns": {
+        "target": {"type": "string"},
+        "max_backoff": {
+          "type": {"key": {"type": "integer",
+                           "minInteger": 1000},
+                   "min": 0, "max": 1}},
+        "inactivity_probe": {
+          "type": {"key": "integer", "min": 0, "max": 1}},
+        "other_config": {
+          "type": {"key": "string", "value": "string", "min": 0, "max": "unlimited"}},
+        "is_connected": {
+          "type": "boolean",
+          "ephemeral": true},
+        "status": {
+          "type": {"key": "string", "value": "string", "min": 0, "max": "unlimited"},
+          "ephemeral": true}},
+      "indexes": [["target"]],
+      "isRoot": false},
+    "SSL": {
+      "columns": {
+        "private_key": {"type": "string"},
+        "certificate": {"type": "string"},
+        "ca_cert": {"type": "string"},
+        "bootstrap_ca_cert": {"type": "boolean"},
+        "external_ids": {
+          "type": {"key": "string", "value": "string",
+                   "min": 0, "max": "unlimited"}}},
+      "maxRows": 1,
+      "isRoot": false},
     "Counters": {
       "columns": {
         "bytes_from_local": {

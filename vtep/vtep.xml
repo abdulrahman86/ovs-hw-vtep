@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<database title="Hardware VTEP Schema">
+  <p>
+    In VXLAN, VTEPs come in two flavors: software VTEPs, embedded into the
+    hypervisor vswitch, that connect VMs to the VXLAN fabric, and hardware
+    VTEPs, typically incorporated into layer 2/3 hardware switches, bridging
+    physical hosts into the VXLAN fabric.  A network virtualization controller
+    (NVC) typically manages the software VTEPs via an OVSDB instance embedded
+    into each software VTEP.  There is customer benefit in extending the NVC to
+    manage physical VTEPs in a similar manner.  This document describes the
+    OVSDB schema that hardware VTEPs (or a hardware switch controller (HSC))
+    may implement to enable integration with an NVC.
+  </p>
+
+  <p>Glossary:</p>
+
+  <dl>
+    <dt>VTEP</dt>
+    <dd>
+      VXLAN Tunnel End Point, an entity which originates and/or terminates
+      VXLAN tunnels.
+    </dd>
+
+    <dt>HSC</dt>
+    <dd>
+      Hardware Switch Controller.
+    </dd>
+
+    <dt>NVC</dt>
+    <dd>
+      Network Virtualization Controller, e.g. NVP.
+    </dd>
+  </dl>
+
+  <table name="Global" title="Top-level configuration.">
+    Top-level configuration for a hardware VEPT.  There must be
+    exactly one record in the <ref table="Global"/> table.
+
+    <group title="Database Configuration">
+      <p>
+        These columns primarily configure the Open vSwitch database
+        (<code>ovsdb-server</code>), not the hardware VTEP itself.
+      </p>
+
+      <column name="managers">
+        Database clients to which the Open vSwitch database server should
+        connect or to which it should listen, along with options for how these
+        connection should be configured.  See the <ref table="Manager"/> table
+        for more information.
+      </column>
+
+      <column name="ssl">
+        SSL configuration used by the database server.
+      </column>
+    </group>
+  </table>
+
+  <table name="SSL">
+    SSL configuration for the database server.
+
+    <column name="private_key">
+      Name of a PEM file containing the private key used as the switch's
+      identity for SSL connections to the controller.
+    </column>
+
+    <column name="certificate">
+      Name of a PEM file containing a certificate, signed by the
+      certificate authority (CA) used by the controller and manager,
+      that certifies the switch's private key, identifying a trustworthy
+      switch.
+    </column>
+
+    <column name="ca_cert">
+      Name of a PEM file containing the CA certificate used to verify
+      that the switch is connected to a trustworthy controller.
+    </column>
+
+    <column name="bootstrap_ca_cert">
+      If set to <code>true</code>, then the database server will attempt to
+      obtain the CA certificate on its first SSL connection and save it to the
+      named PEM file. If it is successful, it will immediately drop the
+      connection and reconnect, and from then on all SSL connections must be
+      authenticated by a certificate signed by the CA certificate thus
+      obtained.  <em>This option exposes the SSL connection to a
+      man-in-the-middle attack obtaining the initial CA certificate.</em> It
+      may still be useful for bootstrapping.
+    </column>
+  </table>
+
+</database>
