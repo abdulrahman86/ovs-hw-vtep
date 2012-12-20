@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <database title="Hardware VTEP Schema">
   <p>
-    In VXLAN, VTEPs come in two flavors: software VTEPs, embedded into the
-    hypervisor vswitch, that connect VMs to the VXLAN fabric, and hardware
-    VTEPs, typically incorporated into layer 2/3 hardware switches, bridging
-    physical hosts into the VXLAN fabric.  A network virtualization controller
-    (NVC) typically manages the software VTEPs via an OVSDB instance embedded
-    into each software VTEP.  There is customer benefit in extending the NVC to
-    manage physical VTEPs in a similar manner.  This document describes the
-    OVSDB schema that hardware VTEPs (or a hardware switch controller (HSC))
-    may implement to enable integration with an NVC.
+    This schema specifies relations that a VTEP can use to integrate
+    physical ports into logical networks maintained by a network
+    virtualization controller such as NVP.
   </p>
-
+  
   <p>Glossary:</p>
 
   <dl>
@@ -33,8 +27,12 @@
   </dl>
 
   <table name="Global" title="Top-level configuration.">
-    Top-level configuration for a hardware VEPT.  There must be
+    Top-level configuration for a hardware VTEP.  There must be
     exactly one record in the <ref table="Global"/> table.
+
+    <column name="switches">
+      The physical switches managed by the VTEP.
+    </column>
 
     <group title="Database Configuration">
       <p>
@@ -53,6 +51,99 @@
         SSL configuration used by the database server.
       </column>
     </group>
+  </table>
+
+  <table name="Physical_Switch" title="A physical switch.">
+    A physical switch within the domain of the VTEP.
+
+    <column name="ports">
+      The physical ports within the switch.
+    </column>
+
+    <group title="Identification">
+      <column name="name">
+	Symbolic name for the switch, such as its hostname.
+      </column>
+      
+      <column name="description">
+	An extended description for the switch, such as its switch login
+	banner.
+      </column>
+    </group>
+  </table>
+
+  <table name="Physical_Port" title="A port within a physical switch.">
+    A port within a <ref table="Physical_Switch"/>.
+
+    <column name="vlan_to_logical_network">
+      Identifies a binding of logical networks to VLANs on the physical port.
+      If, for example, the map contains a (VLAN, logical network) pair, a
+      packet that arrives on the port in the VLAN is considered to belong to
+      the paired logical network.
+    </column>
+
+    <group title="Identification">
+      <column name="name">
+	Symbolic name for the port.  The name ought to be unique within a given
+	<ref table="Physical_Switch"/>, but the database is not capable of
+	enforcing this.
+      </column>
+      
+      <column name="description">
+	An extended description for the port.
+      </column>
+    </group>
+  </table>
+
+  <table name="Logical_Network" title="A layer-2 domain.">
+    A logical Ethernet network, whose implementation may span physical and
+    virtual media, possibly crossing L3 domains via tunnels; a logical layer-2
+    domain; an Ethernet broadcast domain.
+
+    <column name="mac_locations">
+      Identifies the physical location at which given Ethernet unicast,
+      multicast, or broadcast addresses are known to reside, functioning in a
+      way analogous to a MAC learning table for a logical network.
+    </column>
+
+    <column name="ipv4_locations">
+      Identifies the physical location at which given IPv4 addresses are known
+      to reside, allowing for ARP suppression.
+    </column>
+
+    <column name="ipv6_locations">
+      Identifies the physical location at which given IPv6 addresses are known
+      to reside, allowing for IPv6 neighbor discovery suppression.
+    </column>
+
+    <group title="Identification">
+      <column name="name">
+	Symbolic name for the logical network.
+      </column>
+      
+      <column name="description">
+	An extended description for the logical network, such as its switch
+	login banner.
+      </column>
+    </group>
+  </table>
+
+  <table name="Physical_Locator">
+    A tunnel or some equivalent (e.g. collection of tunnels bundled together
+    for robustness against failure).
+
+    <column name="encapsulation_type">
+      The type of tunneling encapsulation.
+    </column>
+
+    <column name="vtep_ip_address">
+      For <code>vxlan_over_ipv4</code> encapsulation, the IPv4 address of the
+      VXLAN tunnel endpoint.
+    </column>
+
+    <column name="vni">
+      For <code>vxlan_over_ipv4</code> encapsulation, the VXLAN VNI.
+    </column>
   </table>
 
   <table name="SSL">

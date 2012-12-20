@@ -10,10 +10,61 @@
         "ssl": {
           "type": {"key": {"type": "uuid",
                            "refTable": "SSL"},
-                   "min": 0, "max": 1}}
+                   "min": 0, "max": 1}},
+	"switches": {
+	  "type": {"key": {"type": "uuid", "refTable": "Physical_Switch"},
+		   "min": 0, "max": "unlimited"}},
+	"logical_networks": {
+	  "type": {"key": {"type": "uuid", "refTable": "Logical_Network"},
+		   "min": 0, "max": "unlimited"}}
       },
       "maxRows": 1,
       "isRoot": true},
+    "Physical_Switch": {
+      "columns": {
+	"ports": {
+	  "type": {"key": {"type": "uuid", "refTable": "Physical_Port"},
+		   "min": 0, "max": "unlimited"}},
+        "name": {"type": "string"},
+        "description": {"type": "string"}},
+      "indexes": [["name"]]},
+    "Physical_Port": {
+      "columns": {
+        "name": {"type": "string"},
+        "description": {"type": "string"},
+	"vlan_to_logical_network": {
+	  "type": {"key": {"type": "integer",
+			   "minInteger": 0, "maxInteger": 4095},
+		   "value": {"type": "uuid", "refTable": "Logical_Network"},
+		   "min": 0, "max": "unlimited"}}}},
+    "Logical_Network": {
+      "columns": {
+        "name": {"type": "string"},
+        "description": {"type": "string"},
+	"mac_locations": {
+	  "type": {"key": {"type": "string"},
+		   "value": {"type": "uuid", "refTable": "Physical_Locator"},
+		   "min": 0, "max": "unlimited"}},
+	"ipv4_locations": {
+	  "type": {"key": {"type": "string"},
+		   "value": {"type": "uuid", "refTable": "Physical_Locator"},
+		   "min": 0, "max": "unlimited"}},
+	"ipv6_locations": {
+	  "type": {"key": {"type": "string"},
+		   "value": {"type": "uuid", "refTable": "Physical_Locator"},
+		   "min": 0, "max": "unlimited"}}},
+      "indexes": [["name"]]},
+    "Physical_Locator": {
+      "columns": {
+        "encapsulation_type": {
+          "type": {
+            "key": {
+              "enum": ["set", ["vxlan_over_ipv4"]],
+              "type": "string"}}},
+        "vtep_ip_address": {"type": "string"},
+	"vni": {"type": {"key": {"type": "integer",
+				 "minInteger": 0, "maxInteger": 16777215}}}},
+      "indexes": [["encapsulation_type", "vtep_ip_address", "vni"]]},
     "Manager": {
       "columns": {
         "target": {"type": "string"},
@@ -43,159 +94,5 @@
           "type": {"key": "string", "value": "string",
                    "min": 0, "max": "unlimited"}}},
       "maxRows": 1,
-      "isRoot": false},
-    "Counters": {
-      "columns": {
-        "bytes_from_local": {
-          "type": "integer"},
-        "bytes_to_local": {
-          "type": "integer"},
-        "domain": {
-          "type": {
-            "key": {
-              "refTable": "Layer_2_Domain",
-              "refType": "strong",
-              "type": "uuid"}}},
-        "packets_from_local": {
-          "type": "integer"},
-        "packets_to_local": {
-          "type": "integer"},
-        "port": {
-          "type": {
-            "key": {
-              "refTable": "Physical_Port",
-              "refType": "strong",
-              "type": "uuid"}}}},
-      "indexes": [["port", "domain"]],
-      "isRoot": true},
-    "Layer_2_Domain": {
-      "columns": {
-        "description": {
-          "type": "string"},
-        "name": {
-          "type": "string"}},
-      "indexes": [["name"]],
-      "isRoot": true},
-    "Layer_2_Membership": {
-      "columns": {
-        "domain": {
-          "type": {
-            "key": {
-              "refTable": "Layer_2_Domain",
-              "refType": "strong",
-              "type": "uuid"}}},
-        "locator": {
-          "type": {
-            "key": {
-              "refTable": "Physical_Locator",
-              "refType": "strong",
-              "type": "uuid"}}},
-        "vni": {
-          "type": "integer"}},
-      "indexes": [["domain", "locator"]],
-      "isRoot": true},
-    "Layer_2_Multicast": {
-      "columns": {
-        "domain": {
-          "type": {
-            "key": {
-              "refTable": "Layer_2_Domain",
-              "refType": "strong",
-              "type": "uuid"}}},
-        "locator": {
-          "type": {
-            "key": {
-              "refTable": "Physical_Locator",
-              "refType": "strong",
-              "type": "uuid"}}},
-        "mac_address": {
-          "type": "string"}},
-      "indexes": [["domain", "mac_address", "locator"]],
-      "isRoot": true},
-    "Layer_2_Unicast": {
-      "columns": {
-        "domain": {
-          "type": {
-            "key": {
-              "refTable": "Layer_2_Domain",
-              "refType": "strong",
-              "type": "uuid"}}},
-        "ipv4_address": {
-          "type": "string"},
-        "ipv6_address": {
-          "type": "string"},
-        "locator": {
-          "type": {
-            "key": {
-              "refTable": "Physical_Locator",
-              "refType": "strong",
-              "type": "uuid"}}},
-        "mac_address": {
-          "type": "string"}},
-      "indexes": [["domain", "mac_address"]],
-      "isRoot": true},
-    "Physical_Locator": {
-      "columns": {
-        "encapsulation_type": {
-          "type": {
-            "key": {
-              "enum": [
-                "set",
-                [
-                  "vxlan_over_ipv4"]],
-              "type": "string"}}},
-        "vtep_ip_address": {
-          "type": "string"}},
-      "isRoot": true},
-    "Physical_Port": {
-      "columns": {
-        "description": {
-          "type": "string"},
-        "name": {
-          "type": "string"},
-        "switch": {
-          "type": {
-            "key": {
-              "refTable": "Physical_Switch",
-              "refType": "strong",
-              "type": "uuid"}}}},
-      "indexes": [["switch", "name"]],
-      "isRoot": true},
-    "Physical_Switch": {
-      "columns": {
-        "description": {
-          "type": "string"},
-        "locator": {
-          "type": {
-            "key": {
-              "refTable": "Physical_Locator",
-              "type": "uuid"}}},
-        "management_ip_address": {
-          "type": "string"},
-        "name": {
-          "type": "string"}},
-      "indexes": [["name"]],
-      "isRoot": true},
-    "Port_Tag_Map": {
-      "columns": {
-        "domain": {
-          "type": {
-            "key": {
-              "refTable": "Layer_2_Domain",
-              "refType": "strong",
-              "type": "uuid"}}},
-        "port": {
-          "type": {
-            "key": {
-              "refTable": "Physical_Port",
-              "refType": "strong",
-              "type": "uuid"}}},
-        "tag": {
-          "type": {
-            "key": {
-              "maxInteger": 4094,
-              "minInteger": 0,
-              "type": "integer"}}}},
-      "indexes": [["port", "tag"]],
-      "isRoot": true}},
+      "isRoot": false}},
   "version": "0.1.0"}
