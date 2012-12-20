@@ -19,7 +19,11 @@
 	  "type": {"key": {"type": "uuid", "refTable": "Physical_Port"},
 		   "min": 0, "max": "unlimited"}},
         "name": {"type": "string"},
-        "description": {"type": "string"}},
+        "description": {"type": "string"},
+        "management_ips": {
+	  "type": {"key": {"type": "string"}, "min": 0, "max": "unlimited"}},
+        "tunnel_ips": {
+	  "type": {"key": {"type": "string"}, "min": 0, "max": "unlimited"}}},
       "indexes": [["name"]]},
     "Physical_Port": {
       "columns": {

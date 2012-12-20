@@ -50,11 +50,31 @@
   </table>
 
   <table name="Physical_Switch" title="A physical switch.">
-    A physical switch within the domain of the VTEP.
+    A physical switch that implements a VTEP.
 
     <column name="ports">
       The physical ports within the switch.
     </column>
+
+    <group title="Network Status">
+      <column name="management_ips">
+        IPv4 or IPv6 addresses at which the switch may be contacted
+        for management purposes.
+      </column>
+
+      <column name="tunnel_ips">
+        <p>
+          IPv4 or IPv6 addresses on which the switch may originate or
+          terminate tunnels.
+        </p>
+
+        <p>
+          This column is intended to allow a <ref table="Manager"/> to
+          determine the <ref table="Physical_Switch"/> that terminates
+          the tunnel represented by a <ref table="Physical_Locator"/>.
+        </p>
+      </column>
+    </group>
 
     <group title="Identification">
       <column name="name">
