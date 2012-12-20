@@ -14,8 +14,8 @@
 	"switches": {
 	  "type": {"key": {"type": "uuid", "refTable": "Physical_Switch"},
 		   "min": 0, "max": "unlimited"}},
-	"logical_networks": {
-	  "type": {"key": {"type": "uuid", "refTable": "Logical_Network"},
+	"logical_switches": {
+	  "type": {"key": {"type": "uuid", "refTable": "Logical_Switch"},
 		   "min": 0, "max": "unlimited"}}
       },
       "maxRows": 1,
@@ -32,12 +32,12 @@
       "columns": {
         "name": {"type": "string"},
         "description": {"type": "string"},
-	"vlan_to_logical_network": {
+	"vlan_to_logical_switch": {
 	  "type": {"key": {"type": "integer",
 			   "minInteger": 0, "maxInteger": 4095},
-		   "value": {"type": "uuid", "refTable": "Logical_Network"},
+		   "value": {"type": "uuid", "refTable": "Logical_Switch"},
 		   "min": 0, "max": "unlimited"}}}},
-    "Logical_Network": {
+    "Logical_Switch": {
       "columns": {
         "name": {"type": "string"},
         "description": {"type": "string"},

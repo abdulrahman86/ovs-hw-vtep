@@ -2,7 +2,7 @@
 <database title="Hardware VTEP Schema">
   <p>
     This schema specifies relations that a VTEP can use to integrate
-    physical ports into logical networks maintained by a network
+    physical ports into logical switches maintained by a network
     virtualization controller such as NVP.
   </p>
   
@@ -75,11 +75,11 @@
   <table name="Physical_Port" title="A port within a physical switch.">
     A port within a <ref table="Physical_Switch"/>.
 
-    <column name="vlan_to_logical_network">
-      Identifies a binding of logical networks to VLANs on the physical port.
-      If, for example, the map contains a (VLAN, logical network) pair, a
+    <column name="vlan_to_logical_switch">
+      Identifies a binding of logical switch to VLANs on the physical port.
+      If, for example, the map contains a (VLAN, logical switch) pair, a
       packet that arrives on the port in the VLAN is considered to belong to
-      the paired logical network.
+      the paired logical switch.
     </column>
 
     <group title="Identification">
@@ -95,15 +95,15 @@
     </group>
   </table>
 
-  <table name="Logical_Network" title="A layer-2 domain.">
-    A logical Ethernet network, whose implementation may span physical and
+  <table name="Logical_Switch" title="A layer-2 domain.">
+    A logical Ethernet switch, whose implementation may span physical and
     virtual media, possibly crossing L3 domains via tunnels; a logical layer-2
     domain; an Ethernet broadcast domain.
 
     <column name="mac_locations">
       Identifies the physical location at which given Ethernet unicast,
       multicast, or broadcast addresses are known to reside, functioning in a
-      way analogous to a MAC learning table for a logical network.
+      way analogous to a MAC learning table for a logical switch.
     </column>
 
     <column name="ipv4_locations">
@@ -118,11 +118,11 @@
 
     <group title="Identification">
       <column name="name">
-	Symbolic name for the logical network.
+	Symbolic name for the logical switch.
       </column>
       
       <column name="description">
-	An extended description for the logical network, such as its switch
+	An extended description for the logical switch, such as its switch
 	login banner.
       </column>
     </group>
