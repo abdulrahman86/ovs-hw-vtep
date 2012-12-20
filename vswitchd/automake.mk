@@ -48,7 +48,7 @@ pkgdata_DATA += vswitchd/vswitch.ovsschema
 # if vswitch.gv actually changes.
 $(srcdir)/vswitchd/vswitch.gv: ovsdb/ovsdb-dot.in vswitchd/vswitch.ovsschema
 if HAVE_PYTHON
-	$(OVSDB_DOT) $(srcdir)/vswitchd/vswitch.ovsschema > $@
+	$(OVSDB_DOT) --no-arrows $(srcdir)/vswitchd/vswitch.ovsschema > $@
 else
 	touch $@
 endif
