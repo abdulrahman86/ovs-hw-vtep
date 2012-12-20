@@ -112,6 +112,63 @@
       to reside, allowing for IPv6 neighbor discovery suppression.
     </column>
 
+    <group title="Per Logical-Switch Key">
+      <p>
+        Tunnel protocols tend to have a field that allows the tunnel to be
+        partitioned into sub-tunnels: VXLAN has a VNI, GRE and STT have a key,
+        CAPWAP has a WSI, and so on.  We call these generically ``keys.''
+        Given that one needs to use a key at all, there are at two reasonable
+        ways to assign their values:
+      </p>
+
+      <ul>
+        <li>
+          <p>
+            Per <ref table="Logical_Switch"/>+<ref table="Physical_Locator"/>
+            pair.  That is, each logical switch may be assigned a different key
+            on every <ref table="Physical_Locator"/>.  This model is especially
+            flexible.
+          </p>
+
+          <p>
+            In this model, <ref table="Physical_Locator"/> carries the key
+            data.  Therefore, one <ref table="Physical_Locator"/> record will
+            exist for each logical switch carried at a given IP destination.
+          </p>
+        </li>
+
+        <li>
+          <p>
+            Per <ref table="Logical_Switch"/>.  That is, every tunnel
+            associated with a particular logical switch carries the same key,
+            regardless of the <ref table="Physical_Locator"/> to which the
+            tunnel is addressed.  This model may ease switch implementation
+            because it imposes fewer requirements on the hardware datapath.
+          </p>
+
+          <p>
+            In this model, <ref table="Logical_Switch"/> carries the key data.
+            Therefore, one <ref table="Physical_Locator"/> record will exist
+            for each IP destination.
+          </p>
+        </li>
+      </ul>
+
+      <column name="key">
+        <p>
+          This column is used only in the key per <ref table="Logical_Switch"/>
+          model (see above), because only in that model is there a key
+          associated with a logical switch.
+        </p>
+
+        <p>
+          For <code>vxlan_over_ipv4</code> encapsulation, this column
+          is the VXLAN VNI that identifies a logical switch.  It must
+          be in the range 0 to 16,777,215.
+        </p>
+      </column>
+    </group>
+
     <group title="Identification">
       <column name="name">
 	Symbolic name for the logical switch.
@@ -125,20 +182,46 @@
   </table>
 
   <table name="Physical_Locator">
-    A tunnel or some equivalent (e.g. collection of tunnels bundled together
-    for robustness against failure).
+    <p>
+      Identifies an endpoint to which logical switch traffic may be
+      encapsulated and forwarded.
+    </p>
+
+    <p>
+      For the <code>vxlan_over_ipv4</code> encapsulation, the only
+      encapsulation defined so far, all endpoints associated with a given <ref
+      table="Logical_Switch"/> must use a common tunnel key, which is carried
+      in the <ref table="Logical_Switch" column="key"/> column of <ref
+      table="Logical_Switch"/>.
+    </p>
+
+    <p>
+      For some encapsulations yet to be defined, we expect <ref
+      table="Physical_Locator"/> to identify both an endpoint and a tunnel key.
+      When the first such encapsulation is defined, we expect to add a ``key''
+      column to <ref table="Physical_Locator"/> to allow the tunnel key to be
+      defined.
+    </p>
+
+    <p>
+      See the ``Per Logical-Switch Key'' section in the <ref
+      table="Logical_Switch"/> table for further discussion of the model.
+    </p>
 
     <column name="encapsulation_type">
       The type of tunneling encapsulation.
     </column>
 
-    <column name="vtep_ip_address">
-      For <code>vxlan_over_ipv4</code> encapsulation, the IPv4 address of the
-      VXLAN tunnel endpoint.
-    </column>
+    <column name="dst_ip">
+      <p>
+        For <code>vxlan_over_ipv4</code> encapsulation, the IPv4 address of the
+        VXLAN tunnel endpoint.
+      </p>
 
-    <column name="vni">
-      For <code>vxlan_over_ipv4</code> encapsulation, the VXLAN VNI.
+      <p>
+        We expect that this column could be used for IPv4 or IPv6 addresses in
+        encapsulations to be introduced later.
+      </p>
     </column>
   </table>
 
