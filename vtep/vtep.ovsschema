@@ -13,9 +13,6 @@
                    "min": 0, "max": 1}},
 	"switches": {
 	  "type": {"key": {"type": "uuid", "refTable": "Physical_Switch"},
-		   "min": 0, "max": "unlimited"}},
-	"logical_switches": {
-	  "type": {"key": {"type": "uuid", "refTable": "Logical_Switch"},
 		   "min": 0, "max": "unlimited"}}
       },
       "maxRows": 1,
@@ -53,6 +50,7 @@
 	  "type": {"key": {"type": "string"},
 		   "value": {"type": "uuid", "refTable": "Physical_Locator"},
 		   "min": 0, "max": "unlimited"}}},
+      "isRoot": true,
       "indexes": [["name"]]},
     "Physical_Locator": {
       "columns": {
