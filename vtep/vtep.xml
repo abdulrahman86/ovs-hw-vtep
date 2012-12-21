@@ -91,11 +91,19 @@
   <table name="Physical_Port" title="A port within a physical switch.">
     A port within a <ref table="Physical_Switch"/>.
 
-    <column name="vlan_to_logical_switch">
-      Identifies a binding of logical switch to VLANs on the physical port.
-      If, for example, the map contains a (VLAN, logical switch) pair, a
-      packet that arrives on the port in the VLAN is considered to belong to
-      the paired logical switch.
+    <column name="vlan_logical_bindings">
+      <p>
+        Identifies a binding of VLANs on the physical port to logical switches.
+        If, for example, the map contains a (VLAN, logical switch) pair, a
+        packet that arrives on the port in the VLAN is considered to belong to
+        the paired logical switch.
+      </p>
+
+      <p>
+        The column's value type is <ref table="Logical_Binding"/> rather than
+        <ref table="Logical_Switch"/> to allow statistics to be associated with
+        the binding.
+      </p>        
     </column>
 
     <group title="Identification">
@@ -107,6 +115,34 @@
       
       <column name="description">
 	An extended description for the port.
+      </column>
+    </group>
+  </table>
+
+  <table name="Logical_Binding" title="Binds a VLAN on a physical port to a logical network.">
+    Identifies the <ref table="Logical_Switch"/> with which a VLAN on a <ref
+    table="Physical_Port"/> is associated.
+
+    <column name="logical_switch"/>
+
+    <group title="Statistics">
+      These statistics count only packets to which the binding applies.
+
+      <column name="packets_from_local">
+        Number of packets sent by the <ref table="Physical_Switch"/>.
+      </column>
+
+      <column name="bytes_from_local">
+        Number of bytes in packets sent by the <ref table="Physical_Switch"/>.
+      </column>
+
+      <column name="packets_to_local">
+        Number of packets received by the <ref table="Physical_Switch"/>.
+      </column>
+
+      <column name="bytes_to_local">
+        Number of bytes in packets received by the <ref
+        table="Physical_Switch"/>.
       </column>
     </group>
   </table>

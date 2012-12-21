@@ -29,11 +29,19 @@
       "columns": {
         "name": {"type": "string"},
         "description": {"type": "string"},
-	"vlan_to_logical_switch": {
+	"vlan_logical_bindings": {
 	  "type": {"key": {"type": "integer",
 			   "minInteger": 0, "maxInteger": 4095},
-		   "value": {"type": "uuid", "refTable": "Logical_Switch"},
+		   "value": {"type": "uuid", "refTable": "Logical_Binding"},
 		   "min": 0, "max": "unlimited"}}}},
+    "Logical_Binding": {
+      "columns": {
+        "logical_switch": {
+	  "type": {"key": {"type": "uuid", "refTable": "Logical_Switch"}}},
+        "bytes_from_local": {"type": "integer"},
+        "packets_from_local": {"type": "integer"},
+        "bytes_to_local": {"type": "integer"},
+        "packets_to_local": {"type": "integer"}}},
     "Logical_Switch": {
       "columns": {
         "name": {"type": "string"},
