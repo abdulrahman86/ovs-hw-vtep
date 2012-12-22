@@ -64,7 +64,10 @@ EXTRA_DIST = \
 	build-aux/sodepends.pl \
 	build-aux/soexpand.pl \
 	$(MAN_FRAGMENTS) \
-	$(MAN_ROOTS)
+	$(MAN_ROOTS) \
+	vtep/Makefile \
+	vtep/vtep.ovsschema \
+	vtep/vtep.xml
 bin_PROGRAMS =
 sbin_PROGRAMS =
 bin_SCRIPTS =
