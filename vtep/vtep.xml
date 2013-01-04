@@ -152,27 +152,26 @@
     virtual media, possibly crossing L3 domains via tunnels; a logical layer-2
     domain; an Ethernet broadcast domain.
 
-    <column name="mac_locations">
+    <column name="unicast_mac_locations">
       <p>
-        Identifies the physical location or locations at which given
-        Ethernet addresses are known to reside, functioning in a way
-        analogous to a MAC learning table for a logical switch.
+        Identifies the physical location or locations at which given unicast
+        Ethernet addresses are known to reside, functioning in a way analogous
+        to a MAC learning table for a logical switch.
+      </p>
+    </column>
+
+    <column name="multicast_mac_locations">
+      <p>
+        Identifies the physical location or locations at which packets
+        addressed to the given multicast Ethernet addresses should be sent.
       </p>
 
       <p>
-        Unicast Ethernet addresses should map to <ref
-        table="Physical_Locator_Set"/> records that point to exactly
-        one <ref table="Physical_Locator"/> record.  Multicast and
-        broadcast Ethernet addresses may map to <ref
-        table="Physical_Locator_Set"/> records that point more than
-        one <ref table="Physical_Locator"/> record.
-      </p>
-
-      <p>
-        The keyword <code>unknown-dst</code> is used as a special
-        ``Ethernet address'' that indicates the locations to which
-        packets in a logical switch whose destination addresses do not
-        otherwise appear in <ref column="mac_locations"/> should be
+        The keyword <code>unknown-dst</code> is used as a special ``Ethernet
+        address'' that indicates the locations to which packets in a logical
+        switch whose destination addresses do not otherwise appear in <ref
+        column="unicast_mac_locations"/> (for unicast addresses) or <ref
+        column="multicast_mac_locations"/> (for multicast addresses) should be
         sent.
       </p>
     </column>

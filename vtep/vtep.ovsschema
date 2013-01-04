@@ -46,7 +46,12 @@
       "columns": {
         "name": {"type": "string"},
         "description": {"type": "string"},
-	"mac_locations": {
+	"unicast_mac_locations": {
+	  "type": {"key": {"type": "string"},
+		   "value": {"type": "uuid",
+                             "refTable": "Physical_Locator"},
+		   "min": 0, "max": "unlimited"}},
+	"multicast_mac_locations": {
 	  "type": {"key": {"type": "string"},
 		   "value": {"type": "uuid",
                              "refTable": "Physical_Locator_Set"},
