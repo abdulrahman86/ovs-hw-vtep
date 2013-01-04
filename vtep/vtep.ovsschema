@@ -67,15 +67,17 @@
       "columns": {
         "locators": {
 	  "type": {"key": {"type": "uuid", "refTable": "Physical_Locator"},
-		   "min": 1, "max": "unlimited"}}}},
+		   "min": 1, "max": "unlimited"},
+		   "mutable": false}}},
     "Physical_Locator": {
       "columns": {
         "encapsulation_type": {
           "type": {
             "key": {
               "enum": ["set", ["vxlan_over_ipv4"]],
-              "type": "string"}}},
-        "dst_ip": {"type": "string"}},
+              "type": "string"}},
+	  "mutable": false},
+        "dst_ip": {"type": "string", "mutable": false}},
       "indexes": [["encapsulation_type", "dst_ip"]]},
     "Manager": {
       "columns": {
