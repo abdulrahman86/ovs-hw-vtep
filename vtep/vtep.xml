@@ -185,27 +185,27 @@
       MAC.)
     </column>
 
-    <group title="Per Logical-Switch Key">
+    <group title="Per Logical-Switch Tunnel Key">
       <p>
         Tunnel protocols tend to have a field that allows the tunnel to be
         partitioned into sub-tunnels: VXLAN has a VNI, GRE and STT have a key,
-        CAPWAP has a WSI, and so on.  We call these generically ``keys.''
-        Given that one needs to use a key at all, there are at two reasonable
-        ways to assign their values:
+        CAPWAP has a WSI, and so on.  We call these generically ``tunnel
+        keys.''  Given that one needs to use a tunnel key at all, there are at
+        two reasonable ways to assign their values:
       </p>
 
       <ul>
         <li>
           <p>
             Per <ref table="Logical_Switch"/>+<ref table="Physical_Locator"/>
-            pair.  That is, each logical switch may be assigned a different key
-            on every <ref table="Physical_Locator"/>.  This model is especially
-            flexible.
+            pair.  That is, each logical switch may be assigned a different
+            tunnel key on every <ref table="Physical_Locator"/>.  This model is
+            especially flexible.
           </p>
 
           <p>
-            In this model, <ref table="Physical_Locator"/> carries the key
-            data.  Therefore, one <ref table="Physical_Locator"/> record will
+            In this model, <ref table="Physical_Locator"/> carries the tunnel
+            key.  Therefore, one <ref table="Physical_Locator"/> record will
             exist for each logical switch carried at a given IP destination.
           </p>
         </li>
@@ -213,25 +213,25 @@
         <li>
           <p>
             Per <ref table="Logical_Switch"/>.  That is, every tunnel
-            associated with a particular logical switch carries the same key,
-            regardless of the <ref table="Physical_Locator"/> to which the
+            associated with a particular logical switch carries the same tunnel
+            key, regardless of the <ref table="Physical_Locator"/> to which the
             tunnel is addressed.  This model may ease switch implementation
             because it imposes fewer requirements on the hardware datapath.
           </p>
 
           <p>
-            In this model, <ref table="Logical_Switch"/> carries the key data.
-            Therefore, one <ref table="Physical_Locator"/> record will exist
-            for each IP destination.
+            In this model, <ref table="Logical_Switch"/> carries the tunnel
+            key.  Therefore, one <ref table="Physical_Locator"/> record will
+            exist for each IP destination.
           </p>
         </li>
       </ul>
 
-      <column name="key">
+      <column name="tunnel_key">
         <p>
-          This column is used only in the key per <ref table="Logical_Switch"/>
-          model (see above), because only in that model is there a key
-          associated with a logical switch.
+          This column is used only in the tunnel key per <ref
+          table="Logical_Switch"/> model (see above), because only in that
+          model is there a tunnel key associated with a logical switch.
         </p>
 
         <p>
@@ -278,20 +278,20 @@
       For the <code>vxlan_over_ipv4</code> encapsulation, the only
       encapsulation defined so far, all endpoints associated with a given <ref
       table="Logical_Switch"/> must use a common tunnel key, which is carried
-      in the <ref table="Logical_Switch" column="key"/> column of <ref
+      in the <ref table="Logical_Switch" column="tunnel_key"/> column of <ref
       table="Logical_Switch"/>.
     </p>
 
     <p>
       For some encapsulations yet to be defined, we expect <ref
       table="Physical_Locator"/> to identify both an endpoint and a tunnel key.
-      When the first such encapsulation is defined, we expect to add a ``key''
-      column to <ref table="Physical_Locator"/> to allow the tunnel key to be
-      defined.
+      When the first such encapsulation is defined, we expect to add a
+      ``tunnel_key'' column to <ref table="Physical_Locator"/> to allow the
+      tunnel key to be defined.
     </p>
 
     <p>
-      See the ``Per Logical-Switch Key'' section in the <ref
+      See the ``Per Logical-Switch Tunnel Key'' section in the <ref
       table="Logical_Switch"/> table for further discussion of the model.
     </p>
 
