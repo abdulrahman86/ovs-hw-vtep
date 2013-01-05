@@ -91,19 +91,20 @@
   <table name="Physical_Port" title="A port within a physical switch.">
     A port within a <ref table="Physical_Switch"/>.
 
-    <column name="vlan_logical_bindings">
-      <p>
-        Identifies a binding of VLANs on the physical port to logical switches.
-        If, for example, the map contains a (VLAN, logical switch) pair, a
-        packet that arrives on the port in the VLAN is considered to belong to
-        the paired logical switch.
-      </p>
+    <column name="vlan_bindings">
+      Identifies how VLANs on the physical port are bound to logical switches.
+      If, for example, the map contains a (VLAN, logical switch) pair, a packet
+      that arrives on the port in the VLAN is considered to belong to the
+      paired logical switch.
+    </column>
 
-      <p>
-        The column's value type is <ref table="Logical_Binding"/> rather than
-        <ref table="Logical_Switch"/> to allow statistics to be associated with
-        the binding.
-      </p>        
+    <column name="vlan_stats">
+      Statistics for VLANs bound to logical switches on the physical port.  An
+      implementation that fully supports such statistics would populate this
+      column with a mapping for every VLAN that is bound in <ref
+      column="vlan_bindings"/>.  An implementation that does not support such
+      statistics or only partially supports them would not populate this column
+      or partially populate it, respectively.
     </column>
 
     <group title="Identification">
@@ -119,11 +120,9 @@
     </group>
   </table>
 
-  <table name="Logical_Binding" title="Binds a VLAN on a physical port to a logical network.">
-    Identifies the <ref table="Logical_Switch"/> with which a VLAN on a <ref
-    table="Physical_Port"/> is associated.
-
-    <column name="logical_switch"/>
+  <table name="Logical_Binding_Stats" title="Statistics for a VLAN on a physical port bound to a logical network.">
+    Reports statistics for the <ref table="Logical_Switch"/> with which a VLAN
+    on a <ref table="Physical_Port"/> is associated.
 
     <group title="Statistics">
       These statistics count only packets to which the binding applies.
