@@ -49,6 +49,189 @@
     </group>
   </table>
 
+  <table name="Manager" title="OVSDB management connection.">
+    <p>
+      Configuration for a database connection to an Open vSwitch database
+      (OVSDB) client.
+    </p>
+
+    <p>
+      The Open vSwitch database server can initiate and maintain active
+      connections to remote clients.  It can also listen for database
+      connections.
+    </p>
+
+    <group title="Core Features">
+      <column name="target">
+        <p>Connection method for managers.</p>
+        <p>
+          The following connection methods are currently supported:
+        </p>
+        <dl>
+          <dt><code>ssl:<var>ip</var></code>[<code>:<var>port</var></code>]</dt>
+          <dd>
+            <p>
+              The specified SSL <var>port</var> (default: 6632) on the host at
+              the given <var>ip</var>, which must be expressed as an IP address
+              (not a DNS name).
+            </p>
+            <p>
+	      SSL key and certificate configuration happens outside the
+	      database.
+            </p>
+          </dd>
+
+          <dt><code>tcp:<var>ip</var></code>[<code>:<var>port</var></code>]</dt>
+          <dd>
+            The specified TCP <var>port</var> (default: 6632) on the host at
+            the given <var>ip</var>, which must be expressed as an IP address
+            (not a DNS name).
+          </dd>
+          <dt><code>pssl:</code>[<var>port</var>][<code>:<var>ip</var></code>]</dt>
+          <dd>
+            <p>
+              Listens for SSL connections on the specified TCP <var>port</var>
+              (default: 6632).  If <var>ip</var>, which must be expressed as an
+              IP address (not a DNS name), is specified, then connections are
+              restricted to the specified local IP address.
+            </p>
+          </dd>
+          <dt><code>ptcp:</code>[<var>port</var>][<code>:<var>ip</var></code>]</dt>
+          <dd>
+            Listens for connections on the specified TCP <var>port</var>
+            (default: 6632).  If <var>ip</var>, which must be expressed as an
+            IP address (not a DNS name), is specified, then connections are
+            restricted to the specified local IP address.
+          </dd>
+        </dl>
+      </column>
+    </group>
+
+    <group title="Client Failure Detection and Handling">
+      <column name="max_backoff">
+        Maximum number of milliseconds to wait between connection attempts.
+        Default is implementation-specific.
+      </column>
+
+      <column name="inactivity_probe">
+        Maximum number of milliseconds of idle time on connection to the client
+        before sending an inactivity probe message.  If Open vSwitch does not
+        communicate with the client for the specified number of seconds, it
+        will send a probe.  If a response is not received for the same
+        additional amount of time, Open vSwitch assumes the connection has been
+        broken and attempts to reconnect.  Default is implementation-specific.
+        A value of 0 disables inactivity probes.
+      </column>
+    </group>
+
+    <group title="Status">
+      <column name="is_connected">
+        <code>true</code> if currently connected to this manager,
+        <code>false</code> otherwise.
+      </column>
+
+      <column name="status" key="last_error">
+        A human-readable description of the last error on the connection
+        to the manager; i.e. <code>strerror(errno)</code>.  This key
+        will exist only if an error has occurred.
+      </column>
+
+      <column name="status" key="state"
+              type='{"type": "string", "enum": ["set", ["VOID", "BACKOFF", "CONNECTING", "ACTIVE", "IDLE"]]}'>
+        <p>
+          The state of the connection to the manager:
+        </p>
+        <dl>
+          <dt><code>VOID</code></dt>
+          <dd>Connection is disabled.</dd>
+
+          <dt><code>BACKOFF</code></dt>
+          <dd>Attempting to reconnect at an increasing period.</dd>
+
+          <dt><code>CONNECTING</code></dt>
+          <dd>Attempting to connect.</dd>
+
+          <dt><code>ACTIVE</code></dt>
+          <dd>Connected, remote host responsive.</dd>
+
+          <dt><code>IDLE</code></dt>
+          <dd>Connection is idle.  Waiting for response to keep-alive.</dd>
+        </dl>
+        <p>
+          These values may change in the future.  They are provided only for
+          human consumption.
+        </p>
+      </column>
+
+      <column name="status" key="sec_since_connect"
+              type='{"type": "integer", "minInteger": 0}'>
+        The amount of time since this manager last successfully connected
+        to the database (in seconds). Value is empty if manager has never
+        successfully connected.
+      </column>
+
+      <column name="status" key="sec_since_disconnect"
+              type='{"type": "integer", "minInteger": 0}'>
+        The amount of time since this manager last disconnected from the
+        database (in seconds). Value is empty if manager has never
+        disconnected.
+      </column>
+
+      <column name="status" key="locks_held">
+        Space-separated list of the names of OVSDB locks that the connection
+        holds.  Omitted if the connection does not hold any locks.
+      </column>
+
+      <column name="status" key="locks_waiting">
+        Space-separated list of the names of OVSDB locks that the connection is
+        currently waiting to acquire.  Omitted if the connection is not waiting
+        for any locks.
+      </column>
+
+      <column name="status" key="locks_lost">
+        Space-separated list of the names of OVSDB locks that the connection
+        has had stolen by another OVSDB client.  Omitted if no locks have been
+        stolen from this connection.
+      </column>
+
+      <column name="status" key="n_connections"
+              type='{"type": "integer", "minInteger": 2}'>
+        <p>
+          When <ref column="target"/> specifies a connection method that
+          listens for inbound connections (e.g. <code>ptcp:</code> or
+          <code>pssl:</code>) and more than one connection is actually active,
+          the value is the number of active connections.  Otherwise, this
+          key-value pair is omitted.
+        </p>
+        <p>
+          When multiple connections are active, status columns and key-value
+          pairs (other than this one) report the status of one arbitrarily
+          chosen connection.
+        </p>
+      </column>
+    </group>
+
+    <group title="Connection Parameters">
+      <p>
+        Additional configuration for a connection between the manager
+        and the Open vSwitch Database.
+      </p>
+
+      <column name="other_config" key="dscp"
+                type='{"type": "integer"}'>
+        The Differentiated Service Code Point (DSCP) is specified using 6 bits
+        in the Type of Service (TOS) field in the IP header. DSCP provides a
+        mechanism to classify the network traffic and provide Quality of
+        Service (QoS) on IP networks.
+
+        The DSCP value specified here is used when establishing the connection
+        between the manager and the Open vSwitch.  If no value is specified, a
+        default value of 48 is chosen.  Valid DSCP values must be in the range
+        0 to 63.
+      </column>
+    </group>
+  </table>
+
   <table name="Physical_Switch" title="A physical switch.">
     A physical switch that implements a VTEP.
 
