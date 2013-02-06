@@ -50,12 +50,22 @@
       "columns": {
         "name": {"type": "string"},
         "description": {"type": "string"},
-	"unicast_mac_locations": {
+	"ucast_mac_locs_local": {
 	  "type": {"key": {"type": "string"},
 		   "value": {"type": "uuid",
                              "refTable": "Physical_Locator"},
 		   "min": 0, "max": "unlimited"}},
-	"multicast_mac_locations": {
+	"mcast_mac_locs_local": {
+	  "type": {"key": {"type": "string"},
+		   "value": {"type": "uuid",
+                             "refTable": "Physical_Locator_Set"},
+		   "min": 0, "max": "unlimited"}},
+        "ucast_mac_locs_remote": {
+	  "type": {"key": {"type": "string"},
+		   "value": {"type": "uuid",
+                             "refTable": "Physical_Locator"},
+		   "min": 0, "max": "unlimited"}},
+	"mcast_mac_locs_remote": {
 	  "type": {"key": {"type": "string"},
 		   "value": {"type": "uuid",
                              "refTable": "Physical_Locator_Set"},

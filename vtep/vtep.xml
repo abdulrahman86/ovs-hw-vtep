@@ -334,29 +334,71 @@
     virtual media, possibly crossing L3 domains via tunnels; a logical layer-2
     domain; an Ethernet broadcast domain.
 
-    <column name="unicast_mac_locations">
+    <group title="Local MAC bindings">
       <p>
-        Identifies the physical location or locations at which given unicast
-        Ethernet addresses are known to reside, functioning in a way analogous
-        to a MAC learning table for a logical switch.
+	These columns contain maps of unicast and multicast Ethernet
+	addresses to physical locations. The local maps are
+	written by the VTEP to refer to MACs that it
+	has learned on its physical ports.
       </p>
-    </column>
+      <column name="ucast_mac_locs_local">
+	<p>
+	  Identifies the physical locations at which given unicast
+	  Ethernet addresses are known to reside, functioning in a way analogous
+	  to a MAC learning table for a logical switch. 
+	</p>
+      </column>
+      
+      <column name="mcast_mac_locs_local">
+	<p>
+	  Identifies the physical location or locations at which packets
+	  addressed to the given multicast Ethernet addresses should be
+	  sent. 
+	</p>
 
-    <column name="multicast_mac_locations">
-      <p>
-        Identifies the physical location or locations at which packets
-        addressed to the given multicast Ethernet addresses should be sent.
-      </p>
+	<p>
+	  The keyword <code>unknown-dst</code> is used as a special ``Ethernet
+	  address'' that indicates the locations to which packets in a logical
+	  switch whose destination addresses do not otherwise appear in <ref
+	  column="ucast_mac_locs_local"/> (for unicast addresses) or <ref
+	  column="mcast_mac_locs_local"/> (for multicast addresses) should be
+	  sent.
+	</p>
+      </column>
+    </group>
 
+    <group title="Remote MAC bindings">
       <p>
-        The keyword <code>unknown-dst</code> is used as a special ``Ethernet
-        address'' that indicates the locations to which packets in a logical
-        switch whose destination addresses do not otherwise appear in <ref
-        column="unicast_mac_locations"/> (for unicast addresses) or <ref
-        column="multicast_mac_locations"/> (for multicast addresses) should be
-        sent.
+	These columns contain maps of unicast and multicast Ethernet
+	addresses to physical locations. The remote maps are
+	written by the network virtualization controller to refer to MACs that it
+	has learned.
       </p>
-    </column>
+      <column name="ucast_mac_locs_remote">
+	<p>
+	  Identifies the physical locations at which given unicast
+	  Ethernet addresses are known to reside, functioning in a way analogous
+	  to a MAC learning table for a logical switch.
+	</p>
+      </column>
+
+      <column name="mcast_mac_locs_remote">
+	<p>
+	  Identifies the physical location or locations at which packets
+	  addressed to the given multicast Ethernet addresses should be
+	  sent.
+	</p>
+	
+	<p>
+	  The keyword <code>unknown-dst</code> is used as a special ``Ethernet
+	  address'' that indicates the locations to which packets in a logical
+	  switch whose destination addresses do not otherwise appear in <ref
+	  column="ucast_mac_locs_remote"/> (for unicast addresses) or <ref
+	  column="mcast_mac_locs_remote"/> (for multicast addresses) should be
+	  sent.
+	</p>
+      </column>
+    </group>
 
     <column name="ip_to_mac">
       Maps from an IPv4 or IPv6 address to the MAC address at which it
