@@ -24,7 +24,12 @@
     <dd>
       Network Virtualization Controller, e.g. NVP.
     </dd>
-  </dl>
+
+    <dt>VRF</dt>
+    <dd>
+      Virtual Routing and Forwarding instance.
+    </dd>
+ </dl>
 
   <table name="Global" title="Top-level configuration.">
     Top-level configuration for a hardware VTEP.  There must be
@@ -281,6 +286,14 @@
       paired logical switch.
     </column>
 
+    <column name="vlan_router_bindings">
+      Identifies how VLANs on the physical port are bound to logical routers.
+      If the map contains a (VLAN, logical router) pair, a packet
+      that arrives on the port in the VLAN will be forwarded by the 
+      referenced logical router. On any given port, a single VLAN can be mapped to
+      a logical router or a logical switch but not both.
+    </column>
+
     <column name="vlan_stats">
       Statistics for VLANs bound to logical switches on the physical port.  An
       implementation that fully supports such statistics would populate this
@@ -473,6 +486,38 @@
       <column name="description">
 	An extended description for the logical switch, such as its switch
 	login banner.
+      </column>
+    </group>
+  </table>
+
+  <table name="Logical_Router" title="A logical L3 router.">
+    <p>
+      A logical router, or VRF. A logical router may be connected to one or more
+      logical switches, and may have at most one interface on a
+      (possibly tagged) physical port.
+    </p>
+    
+    <column name="switch_binding">
+      Maps from an IPv4 or IPv6 address prefix in CIDR notation to a
+      logical switch. Multiple prefixes may map to the same switch. 
+    </column>
+
+    <column name="external_ips">
+      One or more external prefixes attached to the logical router's
+      external interface.
+    </column>
+
+    <column name="static_routes">
+      One or more static routes, mapping IP prefixes to next hop IP addresses.
+    </column>
+
+    <group title="Identification">
+      <column name="name">
+	Symbolic name for the logical router.
+      </column>
+      
+      <column name="description">
+	An extended description for the logical router.
       </column>
     </group>
   </table>
