@@ -1,5 +1,6 @@
 {
   "name": "hardware_vtep",
+  "cksum": "3927916197 5318",
   "tables": {
     "Global": {
       "columns": {

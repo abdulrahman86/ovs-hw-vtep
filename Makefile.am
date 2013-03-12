@@ -64,10 +64,7 @@ EXTRA_DIST = \
 	build-aux/sodepends.pl \
 	build-aux/soexpand.pl \
 	$(MAN_FRAGMENTS) \
-	$(MAN_ROOTS) \
-	vtep/Makefile \
-	vtep/vtep.ovsschema \
-	vtep/vtep.xml
+	$(MAN_ROOTS)
 bin_PROGRAMS =
 sbin_PROGRAMS =
 bin_SCRIPTS =
@@ -248,3 +245,4 @@ include rhel/automake.mk
 include xenserver/automake.mk
 include python/automake.mk
 include python/compat/automake.mk
+include vtep/automake.mk

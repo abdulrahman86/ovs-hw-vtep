@@ -1,3 +1,6 @@
-vtep-diagram.pdf
-vtep.5
-vtep.pic
+/Makefile
+/Makefile.in
+/vtep-ctl
+/vtep-ctl.8
+/vtep.5
+/vtep.ovsschema.stamp
