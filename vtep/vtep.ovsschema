@@ -113,7 +113,13 @@
               "enum": ["set", ["vxlan_over_ipv4"]],
               "type": "string"}},
 	  "mutable": false},
-        "dst_ip": {"type": "string", "mutable": false}},
+        "dst_ip": {"type": "string", "mutable": false},
+	"bfd": {
+          "type": {"key": "string", "value": "string",
+              "min": 0, "max": "unlimited"}},
+      	"bfd_status": {
+          "type": {"key": "string", "value": "string",
+              "min": 0, "max": "unlimited"}}},
       "indexes": [["encapsulation_type", "dst_ip"]]},
     "Manager": {
       "columns": {
