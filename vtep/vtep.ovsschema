@@ -91,7 +91,7 @@
 		   "value": {"type": "uuid",
                              "refTable": "Logical_Switch"},
 		   "min": 0, "max": "unlimited"}},
-	"external_ips":  {
+	"interface_ips":  {
 	  "type": {"key": {"type": "string"}, "min": 0, "max": "unlimited"}},
 	"static_routes": {
 	  "type": {"key": {"type": "string"},

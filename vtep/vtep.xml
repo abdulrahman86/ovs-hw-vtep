@@ -502,9 +502,10 @@
       logical switch. Multiple prefixes may map to the same switch. 
     </column>
 
-    <column name="external_ips">
-      One or more external prefixes attached to the logical router's
-      external interface.
+    <column name="interface_ips">
+      One or more IP addresses attached to an interface of the logical router.
+      An interface IP address must fall within a prefix associated with a logical 
+      switch bound to the router.
     </column>
 
     <column name="static_routes">
