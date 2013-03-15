@@ -34,11 +34,6 @@
 			   "minInteger": 0, "maxInteger": 4095},
 		   "value": {"type": "uuid", "refTable": "Logical_Switch"},
 		   "min": 0, "max": "unlimited"}},
-	"vlan_router_bindings": {
-	  "type": {"key": {"type": "integer",
-			   "minInteger": 0, "maxInteger": 4095},
-		   "value": {"type": "uuid", "refTable": "Logical_Router"},
-		   "min": 0, "max": "unlimited"}},
         "vlan_stats": {
 	  "type": {"key": {"type": "integer",
 			   "minInteger": 0, "maxInteger": 4095},
@@ -91,8 +86,6 @@
 		   "value": {"type": "uuid",
                              "refTable": "Logical_Switch"},
 		   "min": 0, "max": "unlimited"}},
-	"external_ips":  {
-	  "type": {"key": {"type": "string"}, "min": 0, "max": "unlimited"}},
 	"static_routes": {
 	  "type": {"key": {"type": "string"},
 	  	   "value": {"type" : "string"},
