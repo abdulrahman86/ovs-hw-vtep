@@ -339,87 +339,16 @@
     virtual media, possibly crossing L3 domains via tunnels; a logical layer-2
     domain; an Ethernet broadcast domain.
 
-    <group title="Local MAC bindings">
-      <p>
-	These columns contain maps of unicast and multicast Ethernet
-	addresses to physical locations. The local maps are
-	written by the VTEP to refer to MACs that it
-	has learned on its physical ports.
-      </p>
-      <column name="ucast_mac_locs_local">
-	<p>
-	  Identifies the physical locations at which given unicast
-	  Ethernet addresses are known to reside, functioning in a way analogous
-	  to a MAC learning table for a logical switch. 
-	</p>
-      </column>
-      
-      <column name="mcast_mac_locs_local">
-	<p>
-	  Identifies the physical location or locations at which packets
-	  addressed to the given multicast Ethernet addresses should be
-	  sent. 
-	</p>
 
-	<p>
-	  The keyword <code>unknown-dst</code> is used as a special ``Ethernet
-	  address'' that indicates the locations to which packets in a logical
-	  switch whose destination addresses do not otherwise appear in <ref
-	  column="ucast_mac_locs_local"/> (for unicast addresses) or <ref
-	  column="mcast_mac_locs_local"/> (for multicast addresses) should be
-	  sent.
-	</p>
-      </column>
-    </group>
-
-    <group title="Remote MAC bindings">
-      <p>
-	These columns contain maps of unicast and multicast Ethernet
-	addresses to physical locations. The remote maps are
-	written by the network virtualization controller to refer to MACs that it
-	has learned.
-      </p>
-      <column name="ucast_mac_locs_remote">
-	<p>
-	  Identifies the physical locations at which given unicast
-	  Ethernet addresses are known to reside, functioning in a way analogous
-	  to a MAC learning table for a logical switch.
-	</p>
-      </column>
-
-      <column name="mcast_mac_locs_remote">
-	<p>
-	  Identifies the physical location or locations at which packets
-	  addressed to the given multicast Ethernet addresses should be
-	  sent.
-	</p>
-	
-	<p>
-	  The keyword <code>unknown-dst</code> is used as a special ``Ethernet
-	  address'' that indicates the locations to which packets in a logical
-	  switch whose destination addresses do not otherwise appear in <ref
-	  column="ucast_mac_locs_remote"/> (for unicast addresses) or <ref
-	  column="mcast_mac_locs_remote"/> (for multicast addresses) should be
-	  sent.
-	</p>
-      </column>
-    </group>
-
-    <column name="ip_to_mac">
-      Maps from an IPv4 or IPv6 address to the MAC address at which it
-      resides.  (Using the inverse map, from MAC address to IP
-      address, would make it impossible to associate both an IPv4 and
-      IPv6 address, or multiple IPv4 or IPv6 addresses, with a single
-      MAC.)
-    </column>
 
     <group title="Per Logical-Switch Tunnel Key">
       <p>
-        Tunnel protocols tend to have a field that allows the tunnel to be
-        partitioned into sub-tunnels: VXLAN has a VNI, GRE and STT have a key,
-        CAPWAP has a WSI, and so on.  We call these generically ``tunnel
-        keys.''  Given that one needs to use a tunnel key at all, there are at
-        two reasonable ways to assign their values:
+        Tunnel protocols tend to have a field that allows the tunnel
+        to be partitioned into sub-tunnels: VXLAN has a VNI, GRE and
+        STT have a key, CAPWAP has a WSI, and so on.  We call these
+        generically ``tunnel keys.''  Given that one needs to use a
+        tunnel key at all, there are at least two reasonable ways to
+        assign their values:
       </p>
 
       <ul>
@@ -480,6 +409,151 @@
 	login banner.
       </column>
     </group>
+  </table>
+
+  <table name="Ucast_Macs_Local" title="Unicast MACs (local)">
+    <p>
+      Mapping of unicast MAC addresses to tunnels (physical
+      locators). This table is written by the HSC, so it contains the
+      MAC addresses that have been learned on physical ports by a
+      VTEP. 
+    </p>
+
+    <column name="MAC">
+      A MAC address that has been learned by the VTEP.
+    </column>
+
+    <column name="logical_switch">
+      The Logical switch to which this mapping applies.
+    </column>
+
+    <column name="locator">
+      The physical locator to be used to reach this MAC address. In
+      this table, the physical locator will be one of the tunnel IP
+      addresses of the appropriate VTEP.
+    </column>
+
+    <column name="ipaddr">
+      The IP address to which this MAC corresponds. Optional field for
+      the purpose of ARP supression.
+    </column>
+
+  </table>
+
+ <table name="Ucast_Macs_Remote" title="Unicast MACs (remote)">
+    <p>
+      Mapping of unicast MAC addresses to tunnels (physical
+      locators). This table is written by the NVC, so it contains the
+      MAC addresses that the NVC has learned. These include VM MAC
+      addresses, in which case the physical locators will be
+      hypervisor IP addresses. The NVC will also report MACs that it
+      has learned from other HSCs in the network, in which case the
+      physical locators will be tunnel IP addresses of the
+      corresponding VTEPs.
+    </p>
+
+    <column name="MAC">
+      A MAC address that has been learned by the NSC.
+    </column>
+
+    <column name="logical_switch">
+      The Logical switch to which this mapping applies.
+    </column>
+
+    <column name="locator">
+      The physical locator to be used to reach this MAC address. In
+      this table, the physical locator will be either a hypervisor IP
+      address or a tunnel IP addresses of another VTEP.
+    </column>
+
+    <column name="ipaddr">
+      The IP address to which this MAC corresponds. Optional field for
+      the purpose of ARP supression.
+    </column>
+
+  </table>
+
+  <table name="Mcast_Macs_Local" title="Multicast MACs (local)">
+    <p>
+      Mapping of multicast MAC addresses to tunnels (physical
+      locators). This table is written by the HSC, so it contains the
+      MAC addresses that have been learned on physical ports by a
+      VTEP. These may be learned by IGMP snooping, for example. This
+      table also specifies how to handle unknown unicast and broadcast packets.
+    </p>
+
+    <column name="MAC">
+      <p>
+	A MAC address that has been learned by the VTEP. 
+      </p>
+      <p>
+	The keyword <code>unknown-dst</code> is used as a special
+	``Ethernet address'' that indicates the locations to which
+	packets in a logical switch whose destination addresses do not
+	otherwise appear in <ref table="Ucast_Macs_Local"/> (for
+	unicast addresses) or <ref table="Mcast_Macs_Local"/> (for
+	multicast addresses) should be sent.
+      </p>
+    </column>
+
+    <column name="logical_switch">
+      The Logical switch to which this mapping applies.
+    </column>
+
+    <column name="locator_set">
+      The physical locator set to be used to reach this MAC address. In
+      this table, the physical locator set will be contain one or more tunnel IP
+      addresses of the appropriate VTEP(s).
+    </column>
+
+  </table>
+
+  <table name="Mcast_Macs_Remote" title="Multicast MACs (remote)">
+    <p>
+      Mapping of multicast MAC addresses to tunnels (physical
+      locators). This table is written by the NVC, so it contains the
+      MAC addresses that the NVC has learned. This
+      table also specifies how to handle unknown unicast and broadcast
+      packets.
+    </p>
+    <p>
+      Multicast packet replication may be handled by a service node,
+      in which case the physical locators will be IP addresses of
+      service nodes. If the VTEP supports replication onto multiple
+      tunnels, then this may be used to replicate directly onto
+      VTEP-hyperisor tunnels.
+    </p>
+
+    <column name="MAC">
+      <p>
+	A MAC address that has been learned by the NSC.
+      </p>
+      <p>
+	The keyword <code>unknown-dst</code> is used as a special
+	``Ethernet address'' that indicates the locations to which
+	packets in a logical switch whose destination addresses do not
+	otherwise appear in <ref table="Ucast_Macs_Remote"/> (for
+	unicast addresses) or <ref table="Mcast_Macs_Remote"/> (for
+	multicast addresses) should be sent.
+      </p>
+    </column>
+
+    <column name="logical_switch">
+      The Logical switch to which this mapping applies.
+    </column>
+
+    <column name="locator_set">
+      The physical locator set to be used to reach this MAC address. In
+      this table, the physical locator set will be either a service node IP
+      address or a set of tunnel IP addresses of hypervisors (and
+      potentially other VTEPs).
+    </column>
+
+    <column name="ipaddr">
+      The IP address to which this MAC corresponds. Optional field for
+      the purpose of ARP supression.
+    </column>
+
   </table>
 
   <table name="Logical_Router" title="A logical L3 router.">
