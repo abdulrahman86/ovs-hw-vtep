@@ -11,7 +11,7 @@ vtep-diagram.pdf: vtep.ovsschema
 
 vtep.pic: vtep.ovsschema
 	$(RUN_PYTHON) ../ovsdb/ovsdb-dot.in --no-arrows $? | \
-	    $(DOT) -Tplain | ../ovsdb/dot2pic > $@
+	    $(DOT) -Tplain | ../ovsdb/dot2pic -f 2 > $@
 
 vtep.5: vtep.ovsschema vtep.xml vtep.pic
 	$(RUN_PYTHON) ../ovsdb/ovsdb-doc.in --er-diagram vtep.pic \
