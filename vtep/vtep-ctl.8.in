@@ -223,6 +223,9 @@ the local mac binding table for multicast Ethernet address \fImac\fR on
 "vxlan_over_ipv4".  The local mappings are used by the VTEP to refer to
 MACs learned on its physical ports.
 .
+.IP "\fBclear\-local\-macs \fIlswitch\fR"
+Clear the local MAC bindings for \fIlswitch\fR.
+.
 .IP "\fBlist\-local\-macs \fIlswitch\fR"
 List the local MAC bindings for \fIlswitch\fR, one per line.
 .
@@ -256,6 +259,9 @@ the remote mac binding table for multicast Ethernet address \fImac\fR on
 \fIlswitch\fR.  If \fIencap\fR is not specified, the default is
 "vxlan_over_ipv4".  The remote mappings are used by the network
 virtualization platform to refer to MACs that it has learned.
+.
+.IP "\fBclear\-remote\-macs \fIlswitch\fR"
+Clear the remote MAC bindings for \fIlswitch\fR.
 .
 .IP "\fBlist\-remote\-macs \fIlswitch\fR"
 List the remote MAC bindings for \fIlswitch\fR, one per line.
