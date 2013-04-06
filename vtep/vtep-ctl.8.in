@@ -324,6 +324,14 @@ physical port is associated.
 .IP "\fBLogical_Switch\fR"
 A logical Ethernet switch.  Records may be identified by logical switch
 name.
+.IP "\fBUcast_Macs_Local\fR"
+Mapping of locally discovered unicast MAC addresses to tunnels.
+.IP "\fBUcast_Macs_Remote\fR"
+Mapping of remotely programmed unicast MAC addresses to tunnels.
+.IP "\fBMcast_Macs_Local\fR"
+Mapping of locally discovered multicast MAC addresses to tunnels.
+.IP "\fBMcast_Macs_Remote\fR"
+Mapping of remotely programmed multicast MAC addresses to tunnels.
 .IP "\fBPhysical_Locator_Set\fR"
 A set of one or more physical locators.
 .IP "\fBPhysical_Locator\fR"
