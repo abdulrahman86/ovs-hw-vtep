@@ -192,6 +192,10 @@ combination on the physical switch \fIpswitch\fR.
 Remove the logical switch binding from the \fIport\fR/\fIvlan\fR
 combination on the physical switch \fIpswitch\fR.
 .
+.IP "\fBlist\-bindings \fIpswitch port\fR"
+List the logical switch bindings for \fIport\fR on the physical switch
+\fIpswitch\fR.
+.
 .SS "Local MAC Binding Commands"
 These commands examine and manipulate local MAC bindings for the logical
 switch.  The local maps are written by the VTEP to refer to MACs it has
