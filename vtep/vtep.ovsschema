@@ -1,6 +1,6 @@
 {
   "name": "hardware_vtep",
-  "cksum": "3927916197 5318",
+  "cksum": "825115144 5318",
   "tables": {
     "Global": {
       "columns": {
@@ -154,4 +154,4 @@
           "ephemeral": true}},
       "indexes": [["target"]],
       "isRoot": false}},
-  "version": "0.1.0"}
+  "version": "1.0.0"}
