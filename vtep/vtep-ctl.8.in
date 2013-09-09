@@ -192,6 +192,10 @@ combination on the physical switch \fIpswitch\fR.
 Remove the logical switch binding from the \fIport\fR/\fIvlan\fR
 combination on the physical switch \fIpswitch\fR.
 .
+.IP "\fBlist\-bindings \fIpswitch port\fR"
+List the logical switch bindings for \fIport\fR on the physical switch
+\fIpswitch\fR.
+.
 .SS "Local MAC Binding Commands"
 These commands examine and manipulate local MAC bindings for the logical
 switch.  The local maps are written by the VTEP to refer to MACs it has
@@ -222,6 +226,9 @@ the local mac binding table for multicast Ethernet address \fImac\fR on
 \fIlswitch\fR.  If \fIencap\fR is not specified, the default is
 "vxlan_over_ipv4".  The local mappings are used by the VTEP to refer to
 MACs learned on its physical ports.
+.
+.IP "\fBclear\-local\-macs \fIlswitch\fR"
+Clear the local MAC bindings for \fIlswitch\fR.
 .
 .IP "\fBlist\-local\-macs \fIlswitch\fR"
 List the local MAC bindings for \fIlswitch\fR, one per line.
@@ -256,6 +263,9 @@ the remote mac binding table for multicast Ethernet address \fImac\fR on
 \fIlswitch\fR.  If \fIencap\fR is not specified, the default is
 "vxlan_over_ipv4".  The remote mappings are used by the network
 virtualization platform to refer to MACs that it has learned.
+.
+.IP "\fBclear\-remote\-macs \fIlswitch\fR"
+Clear the remote MAC bindings for \fIlswitch\fR.
 .
 .IP "\fBlist\-remote\-macs \fIlswitch\fR"
 List the remote MAC bindings for \fIlswitch\fR, one per line.
@@ -318,6 +328,14 @@ physical port is associated.
 .IP "\fBLogical_Switch\fR"
 A logical Ethernet switch.  Records may be identified by logical switch
 name.
+.IP "\fBUcast_Macs_Local\fR"
+Mapping of locally discovered unicast MAC addresses to tunnels.
+.IP "\fBUcast_Macs_Remote\fR"
+Mapping of remotely programmed unicast MAC addresses to tunnels.
+.IP "\fBMcast_Macs_Local\fR"
+Mapping of locally discovered multicast MAC addresses to tunnels.
+.IP "\fBMcast_Macs_Remote\fR"
+Mapping of remotely programmed multicast MAC addresses to tunnels.
 .IP "\fBPhysical_Locator_Set\fR"
 A set of one or more physical locators.
 .IP "\fBPhysical_Locator\fR"

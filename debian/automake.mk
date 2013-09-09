@@ -49,6 +49,9 @@ EXTRA_DIST += \
 	debian/openvswitch-test.dirs \
 	debian/openvswitch-test.install \
 	debian/openvswitch-test.manpages \
+	debian/openvswitch-vtep.dirs \
+	debian/openvswitch-vtep.install \
+	debian/openvswitch-vtep.manpages \
 	debian/ovsdbmonitor.install \
 	debian/ovsdbmonitor.manpages \
 	debian/ovs-monitor-ipsec \

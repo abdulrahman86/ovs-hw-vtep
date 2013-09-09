@@ -621,11 +621,13 @@ MAC binding commands:\n\
   del-ucast-local LS MAC              del ucast local entry from LS\n\
   add-mcast-local LS MAC [ENCAP] IP   add mcast local entry in LS\n\
   del-mcast-local LS MAC [ENCAP] IP   del mcast local entry from LS\n\
+  clear-local-macs LS                 clear local mac entries\n\
   list-local-macs LS                  list local mac entries\n\
   add-ucast-remote LS MAC [ENCAP] IP  add ucast remote entry in LS\n\
   del-ucast-remote LS MAC             del ucast remote entry from LS\n\
   add-mcast-remote LS MAC [ENCAP] IP  add mcast remote entry in LS\n\
   del-mcast-remote LS MAC [ENCAP] IP  del mcast remote entry from LS\n\
+  clear-remote-macs LS                clear remote mac entries\n\
   list-remote-macs LS                 list remote mac entries\n\
 \n\
 Database commands:\n\
@@ -2006,6 +2008,54 @@ static void
 cmd_del_mcast_remote(struct vtep_ctl_context *ctx)
 {
     add_del_mcast_entry(ctx, false, false);
+}
+
+static void
+clear_macs(struct vtep_ctl_context *ctx, bool local)
+{
+    struct vtep_ctl_lswitch *ls;
+    const struct shash_node *node;
+    struct shash *ucast_shash;
+    struct shash *mcast_shash;
+
+    vtep_ctl_context_populate_cache(ctx);
+    ls = find_lswitch(ctx, ctx->argv[1], true);
+
+    ucast_shash = local ? &ls->ucast_local : &ls->ucast_remote;
+    mcast_shash = local ? &ls->mcast_local : &ls->mcast_remote;
+
+    SHASH_FOR_EACH (node, ucast_shash) {
+        if (local) {
+            struct vteprec_ucast_macs_local *ucast_cfg = node->data;
+            vteprec_ucast_macs_local_delete(ucast_cfg);
+        } else {
+            struct vteprec_ucast_macs_remote *ucast_cfg = node->data;
+            vteprec_ucast_macs_remote_delete(ucast_cfg);
+        }
+    }
+
+    SHASH_FOR_EACH (node, mcast_shash) {
+        struct vtep_ctl_mcast_mac *mcast_mac = node->data;
+        if (local) {
+            vteprec_mcast_macs_local_delete(mcast_mac->local_cfg);
+        } else {
+            vteprec_mcast_macs_remote_delete(mcast_mac->remote_cfg);
+        }
+    }
+
+    vtep_ctl_context_invalidate_cache(ctx);
+}
+
+static void
+cmd_clear_local_macs(struct vtep_ctl_context *ctx)
+{
+    clear_macs(ctx, true);
+}
+
+static void
+cmd_clear_remote_macs(struct vtep_ctl_context *ctx)
+{
+    clear_macs(ctx, false);
 }
 
 static void
@@ -3800,6 +3850,8 @@ static const struct vtep_ctl_command_syntax all_commands[] = {
     {"del-ucast-local", 2, 2, pre_get_info, cmd_del_ucast_local, NULL, "", RW},
     {"add-mcast-local", 3, 4, pre_get_info, cmd_add_mcast_local, NULL, "", RW},
     {"del-mcast-local", 3, 4, pre_get_info, cmd_del_mcast_local, NULL, "", RW},
+    {"clear-local-macs", 1, 1, pre_get_info, cmd_clear_local_macs, NULL, "",
+     RO},
     {"list-local-macs", 1, 1, pre_get_info, cmd_list_local_macs, NULL, "", RO},
     {"add-ucast-remote", 3, 4, pre_get_info, cmd_add_ucast_remote, NULL, "",
      RW},
@@ -3809,6 +3861,8 @@ static const struct vtep_ctl_command_syntax all_commands[] = {
      RW},
     {"del-mcast-remote", 3, 4, pre_get_info, cmd_del_mcast_remote, NULL, "",
      RW},
+    {"clear-remote-macs", 1, 1, pre_get_info, cmd_clear_remote_macs, NULL, "",
+     RO},
     {"list-remote-macs", 1, 1, pre_get_info, cmd_list_remote_macs, NULL, "",
      RO},
 
